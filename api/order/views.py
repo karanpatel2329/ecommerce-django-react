@@ -30,7 +30,7 @@ def add(request, id, token):
         products = request.POST['products']
 
         total_pro = len(products.split(',')[:-1])
-        UserModel = get_user_model
+        UserModel = get_user_model()
 
         try:
             user = UserModel.objects.get(pk=id)

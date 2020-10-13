@@ -7,12 +7,12 @@ import braintree
 # Create your views here.
 
 gateway = braintree.BraintreeGateway(
-    braintree.Configuration(
-        braintree.Environment.Sandbox,
-        merchant_id="dkz5qydrwtvc58sp",
-        public_key="8djcs8762ks23fbk",
-        private_key="38167b11b219c9fe2543303681ee5472"
-    )
+  braintree.Configuration(
+    environment=braintree.Environment.Sandbox,
+    merchant_id='dkz5qydrwtvc58sp',
+    public_key='32pcg7sg3t74n98d',
+    private_key='556d191f7267071e4145bab070fa4939'
+  )
 )
 
 def validate_user_session(id,token):
@@ -29,7 +29,7 @@ def validate_user_session(id,token):
 
 def generate_token(request,id,token):
     if not validate_user_session(id,token):
-        return JsonResponse({'Error':'Invalid session. Please login again'})
+        return JsonResponse({'error':'Invalid session. Please login again'})
 
     return JsonResponse({'clientToken':gateway.client_token.generate(),'Success':True})
 
@@ -39,7 +39,7 @@ def procress_payment(request,id,token):
     if not validate_user_session(id,token):
         return JsonResponse({'Error':'Invalid session. Please login again'})
 
-    return JsonResponse({'clientToken':gateway.client_token.generate(),'Success':True})
+    
 
     nonce_from_the_client = request.POST["paymentMethodNonce"]
     amount_from_the_client = request.POST["amount"]
@@ -55,7 +55,8 @@ def procress_payment(request,id,token):
     if result.is_success:
         return JsonResponse({
             'Success': result.is_success,
-            'transaction':{'id':result.transaction.id,'amount':result.transaction.amount}
+            'transaction':{'id':result.transaction.id,'amount':result.transaction.amount,
+            'test':"helll"}
             })
     else:
         return JsonResponse({'error':True,'Success':False})
